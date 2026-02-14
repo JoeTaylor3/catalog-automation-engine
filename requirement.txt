@@ -1,0 +1,2 @@
+﻿# Example dependencies (leave empty if none)
+requests>=2.0.0
