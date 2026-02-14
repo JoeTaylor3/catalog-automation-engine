@@ -1,0 +1,2 @@
+﻿# Primary dependencies (example)
+requests>=2.0.0
