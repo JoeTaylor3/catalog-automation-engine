@@ -25,6 +25,22 @@ jobs:
           pip install -r requirements.txt
           # install dev requirements (includes test-only deps like openai)
           if [ -f requirements-dev.txt ]; then pip install -r requirements-dev.txt; fi
-      - name: Run tests
+      - name: CI debug info
         run: |
-          pytest -q
+          echo "--- System info ---"
+          uname -a || true
+          echo "--- Python info ---"
+          python --version
+          which python || true
+          echo "--- Pip info ---"
+          pip --version
+          pip list --format=columns || true
+          echo "--- Repo listing ---"
+          ls -la || true
+          echo "--- Working dir ---"
+          pwd || true
+
+      - name: Run tests (verbose)
+        run: |
+          echo "Running pytest with increased verbosity for debugging"
+          pytest -vv || (echo "Pytest exited with code $?"; exit 1)
