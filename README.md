@@ -19,7 +19,7 @@ python catalog-automation-engine\main.py
 - To run tests locally in the created venv:
 
 ```powershell
-Set-Location C:\Users\blond\ai_requirements_pipeline
+Set-Location C:\Users\blond\requirements_pipeline
 .\.venv\Scripts\python.exe -m pip install --upgrade pip
 .\.venv\Scripts\python.exe -m pip install -r requirements.txt
 .\.venv\Scripts\python.exe -m pip install -r requirements-dev.txt
