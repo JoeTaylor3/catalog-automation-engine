@@ -3,6 +3,10 @@ from typing import Dict
 
 import openai
 
+# read API key once at import time; useful for environments where
+# the key may be configured in advance.
+api_key = os.getenv("OPENAI_API_KEY")
+
 
 def generate_ai_summary(metrics: Dict, sql_insights: Dict, validation_summary: Dict) -> str:
     """Builds a prompt from provided statistics and sends it to an OpenAI LLM.
@@ -48,12 +52,12 @@ def generate_ai_summary(metrics: Dict, sql_insights: Dict, validation_summary: D
         "Keep the tone appropriate for a senior leadership audience."
     )
 
-    # read API key from environment
-    api_key = os.getenv("OPENAI_API_KEY")
-    if not api_key:
+    # ensure we have an API key (module-level value may already exist)
+    key = api_key or os.getenv("OPENAI_API_KEY")
+    if not key:
         raise RuntimeError("OPENAI_API_KEY is not set in the environment")
 
-    openai.api_key = api_key
+    openai.api_key = key
 
     # make the request; low temperature for consistent output
     resp = openai.ChatCompletion.create(
