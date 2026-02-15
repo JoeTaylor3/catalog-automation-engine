@@ -20,6 +20,9 @@ from reporting.report_generator import generate_csv_report
 from reporting.metrics import calculate_metrics, print_dashboard, generate_executive_summary
 from database.db_manager import DBManager
 
+# import our AI-based executive summary helper
+from ai.llm_summary import generate_ai_summary
+
 
 def section_header(title):
     # Print a formatted section header
@@ -174,6 +177,33 @@ def main():
         
         db.disconnect()
         print(f"\n   [OK] Database analysis complete")
+
+        # ---------------------------------------------------------------------
+        # AI-generated executive summary (requires metrics & sql insights)
+        # ---------------------------------------------------------------------
+        # build validation summary from metrics (top issue types)
+        validation_summary = {"top_issue_types": [issue for issue, _ in metrics.get("top_5_issues", [])]}
+        sql_insights = {
+            "duplicate_sku_count": len(duplicates),
+            "high_price_anomalies": len(high_price),
+            # count low stock warnings in validation errors
+            "low_inventory_warnings": sum(1 for err in all_errors if err.get("issue_type") == "low_stock_warning"),
+        }
+        try:
+            ai_summary = generate_ai_summary(metrics, sql_insights, validation_summary)
+            print("\nAI EXECUTIVE SUMMARY")
+            print("-" * 80)
+            print(ai_summary)
+            print("-" * 80)
+
+            # save to file under project root `output` directory
+            out_path = Path.cwd() / "output" / "executive_summary.txt"
+            out_path.parent.mkdir(parents=True, exist_ok=True)
+            with open(out_path, "w", encoding="utf-8") as f:
+                f.write(ai_summary + "\n")
+            print(f"\n[OK] AI summary written to {out_path}")
+        except Exception as e:
+            print(f"WARNING: failed to generate AI summary: {e}")
     except Exception as e:
         print(f"ERROR during database analysis: {e}")
         sys.exit(1)
