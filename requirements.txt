@@ -1,2 +1,3 @@
 ﻿# Primary dependencies (example)
 requests>=2.0.0
+openai>=0.27.0
