@@ -1,13 +1,13 @@
-﻿# AI Requirements Pipeline
+﻿# Requirements Pipeline
 
-This project contains a tiny starter structure for an AI requirements pipeline.
+This project contains a starter structure for a requirements validation pipeline.
 
 Usage:
 
 - Run the main script:
 
 ```powershell
-python ai_requirements_pipeline\main.py
+python catalog-automation-engine\main.py
 ```
 
 **CI / Tests**: GitHub Actions workflow added at `.github/workflows/python-package.yml`.
