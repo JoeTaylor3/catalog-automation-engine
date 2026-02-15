@@ -9,6 +9,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      # Ensure Python can import packages located at repo root and the inner
+      # `catalog-automation-engine` directory where tests may run.
+      PYTHONPATH: "${{ github.workspace }}:${{ github.workspace }}/catalog-automation-engine"
     strategy:
       matrix:
         # Quote versions to ensure YAML parser preserves exact strings
